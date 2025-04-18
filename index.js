@@ -41,7 +41,18 @@ function adicionarNaPlanilha(auth, nome, telefone, cidade) {
   });
 }
 
-create().then((client) => {
+create({
+  session: 'hupmix',
+  headless: true,
+  devtools: false,
+  useChrome: false,
+  debug: false,
+  logQR: true,
+  browserArgs: ['--no-sandbox', '--disable-setuid-sandbox'],
+  puppeteerOptions: {
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  }
+}).then((client) => {
   autorizarGoogle((auth) => {
     client.onMessage(async (message) => {
       if (message.body && message.from.includes('@c.us')) {
@@ -54,4 +65,6 @@ create().then((client) => {
       }
     });
   });
+}).catch((error) => {
+  console.error('Erro ao iniciar o bot:', error);
 });
